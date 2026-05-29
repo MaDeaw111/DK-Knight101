@@ -1,0 +1,462 @@
+/* DK Knight Badminton - Cyber-Sport Design System & Theme CSS */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Core Colors */
+  --bg-dark: #12161a;        /* Dark Charcoal base */
+  --bg-card: rgba(22, 28, 34, 0.75);      /* Cyber Card Glass background */
+  --bg-card-solid: #161c22;
+  --bg-card-hover: rgba(26, 32, 40, 0.9);
+  --text-primary: #f8f9fa;   /* Clean White */
+  --text-secondary: #a0aec0; /* Soft Silver */
+  --text-muted: #64748b;     /* Dim Gray */
+  
+  /* Cyber Accent Colors */
+  --neon-blue: #00d2ff;      /* Electric Neon Blue */
+  --neon-blue-glow: rgba(0, 210, 255, 0.4);
+  --metallic-gold: #ffd700;  /* Gold Accent */
+  --gold-glow: rgba(255, 215, 0, 0.45);
+  --metallic-silver: #c0c0c0;
+  
+  --neon-pink: #ff0055;      /* Hot Alert Pink */
+  --neon-pink-glow: rgba(255, 0, 85, 0.4);
+  --success-green: #39ff14;  /* Matrix Green */
+  
+  /* Borders and Panels */
+  --cyber-border: 1px solid rgba(0, 210, 255, 0.2);
+  --cyber-border-active: 1px solid #00d2ff;
+  --gold-border: 1px solid rgba(255, 215, 0, 0.3);
+  --gold-border-active: 1px solid #ffd700;
+  
+  /* Fonts */
+  --font-display: 'Orbitron', system-ui, -apple-system, sans-serif;
+  --font-body: 'Outfit', system-ui, -apple-system, sans-serif;
+  
+  /* Layout values */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-cyber: 0px 16px 0px 16px; /* Cyber-style clipped corner simulation */
+}
+
+/* Reset & Global Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-dark);
+  background-image: 
+    linear-gradient(rgba(18, 22, 26, 0.95), rgba(18, 22, 26, 0.98)),
+    radial-gradient(circle at 50% 10%, rgba(0, 210, 255, 0.12) 0%, transparent 60%),
+    radial-gradient(circle at 10% 80%, rgba(255, 215, 0, 0.04) 0%, transparent 40%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 210, 255, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-blue);
+  box-shadow: 0 0 8px var(--neon-blue);
+}
+
+/* Utility Animations */
+@keyframes cyber-pulse {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.3; }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes glow-pulse {
+  0% { box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(0, 210, 255, 0.5); }
+  100% { box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
+}
+
+/* Base Headings & UI Elements */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Cybernetic Glowing Text */
+.text-glow-blue {
+  color: var(--neon-blue);
+  text-shadow: 0 0 8px rgba(0, 210, 255, 0.6);
+}
+
+.text-glow-gold {
+  color: var(--metallic-gold);
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+/* Cyber Card Glass Container */
+.cyber-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--cyber-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+}
+
+.cyber-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+  transform: scaleX(0);
+  transition: transform 0.5s ease;
+  transform-origin: left;
+}
+
+.cyber-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 210, 255, 0.5);
+  box-shadow: 0 10px 25px rgba(0, 210, 255, 0.15), 0 0 12px var(--neon-blue-glow);
+}
+
+.cyber-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Gold / Milestone Card Variant */
+.cyber-card-gold {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  border: var(--gold-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+}
+
+.cyber-card-gold::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--metallic-gold), transparent);
+  transform: scaleX(0);
+  transition: transform 0.5s ease;
+  transform-origin: left;
+}
+
+.cyber-card-gold:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 215, 0, 0.5);
+  box-shadow: 0 10px 25px rgba(255, 215, 0, 0.15), 0 0 12px var(--gold-glow);
+}
+
+.cyber-card-gold:hover::before {
+  transform: scaleX(1);
+}
+
+/* Cyber Form Inputs */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: rgba(18, 22, 26, 0.8);
+  border: 1px solid rgba(0, 210, 255, 0.25);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 8px rgba(0, 210, 255, 0.4);
+  background: rgba(26, 32, 40, 0.9);
+}
+
+/* Buttons styling with neon gradients and cyber trims */
+.btn-cyber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  padding: 0.85rem 1.75rem;
+  background: linear-gradient(135deg, #0088cc 0%, #00bfff 100%);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+}
+
+.btn-cyber::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: skewX(-30deg);
+  transition: 0.75s ease;
+}
+
+.btn-cyber:hover {
+  background: linear-gradient(135deg, #00a2ff 0%, #00d2ff 100%);
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.7);
+  transform: translateY(-1px);
+}
+
+.btn-cyber:hover::after {
+  left: 120%;
+}
+
+.btn-cyber:active {
+  transform: translateY(1px);
+}
+
+/* Gold Button Variant */
+.btn-cyber-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  padding: 0.85rem 1.75rem;
+  background: linear-gradient(135deg, #cc9900 0%, #ffd700 100%);
+  color: #12161a;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+}
+
+.btn-cyber-gold:hover {
+  background: linear-gradient(135deg, #e6b800 0%, #ffe033 100%);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+  transform: translateY(-1px);
+}
+
+/* Layout Core */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.app-header {
+  border-bottom: 1px solid rgba(0, 210, 255, 0.15);
+  background: rgba(18, 22, 26, 0.85);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 210, 255, 0.1);
+  border: 1px solid var(--neon-blue);
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.2);
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #ffffff 40%, var(--neon-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--neon-blue);
+  background: rgba(0, 210, 255, 0.08);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  width: 60%;
+  height: 2px;
+  background: var(--neon-blue);
+  box-shadow: 0 0 8px var(--neon-blue);
+}
+
+/* Offline API Banner */
+.offline-banner {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 50%, rgba(255, 215, 0, 0.15) 100%);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+  color: var(--metallic-gold);
+  font-size: 0.85rem;
+  font-family: var(--font-display);
+  padding: 0.4rem;
+  text-align: center;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.offline-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--metallic-gold);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--metallic-gold);
+  animation: cyber-pulse 2s infinite;
+}
+
+/* Toast Notification Styles */
+.toast-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 1000;
+}
+
+.toast {
+  background: rgba(22, 28, 34, 0.95);
+  border: 1px solid var(--neon-blue);
+  border-left: 4px solid var(--neon-blue);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5), 0 0 8px rgba(0, 210, 255, 0.2);
+  transform: translateX(120%);
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast.show {
+  transform: translateX(0);
+}
+
+.toast-success {
+  border-color: var(--success-green);
+  border-left-color: var(--success-green);
+}
+
+/* Media Query Responsive Adjustments */
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem 0;
+    gap: 1rem;
+  }
+  
+  .nav-links {
+    width: 100%;
+    justify-content: space-around;
+  }
+}
