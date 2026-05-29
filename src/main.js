@@ -37,7 +37,7 @@ class AppOrchestrator {
         ${isOffline ? `
           <div class="offline-banner">
             <span class="offline-dot"></span>
-            <span>CYBER-ATHLETE OFFLINE DEMO ACTIVE - SAVING TO SECURE LOCAL SANDBOX</span>
+            <span>ระบบเชื่อมต่อแบบออฟไลน์: บันทึกข้อมูลเข้าคลังแซนด์บ็อกซ์ท้องถิ่นอย่างปลอดภัย</span>
           </div>
         ` : ''}
         <div class="container header-inner">
@@ -56,10 +56,10 @@ class AppOrchestrator {
           </div>
           
           <nav class="nav-links">
-            <div class="nav-link ${this.currentView === 'home' ? 'active' : ''}" data-target="home">Home</div>
-            <div class="nav-link ${this.currentView === 'profile' ? 'active' : ''}" data-target="profile">Knight Profile</div>
-            <div class="nav-link ${this.currentView === 'attendance' ? 'active' : ''}" data-target="attendance">Attendance Form</div>
-            <div class="nav-link ${this.currentView === 'assessment' ? 'active' : ''}" data-target="assessment">Physical Assessment</div>
+            <div class="nav-link ${this.currentView === 'home' ? 'active' : ''}" data-target="home">หน้าแรก</div>
+            <div class="nav-link ${this.currentView === 'profile' ? 'active' : ''}" data-target="profile">โปรไฟล์อัศวิน</div>
+            <div class="nav-link ${this.currentView === 'attendance' ? 'active' : ''}" data-target="attendance">บันทึกเวลาเรียน</div>
+            <div class="nav-link ${this.currentView === 'assessment' ? 'active' : ''}" data-target="assessment">ประเมินร่างกาย</div>
           </nav>
         </div>
       </header>

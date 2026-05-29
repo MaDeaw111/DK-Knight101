@@ -30,28 +30,28 @@ export class DkHomePortal extends HTMLElement {
     this.innerHTML = `
       <div class="home-portal-gaming">
         
-        <!-- Hero Welcome Banner -->
+        <!-- Hero Welcome Banner (Thai localized) -->
         <section class="gaming-hero">
           <div class="hud-scanline"></div>
           <div class="hero-glow-back"></div>
           <div class="hero-main-content">
             <div class="lobby-badge">
               <span class="pulse-indicator"></span>
-              <span>CYBER-SPORT GUILD HALL ACTIVE</span>
+              <span>โถงกิลด์อัศวินไซเบอร์สปอร์ตกำลังทำงาน</span>
             </div>
             <h1 class="gaming-title">DK KNIGHT <span class="text-glow-blue">PORTAL</span></h1>
             <p class="gaming-subtitle">เปลี่ยนการฝึกซ้อมสู่สเตตัสอัศวินระดับโลก</p>
           </div>
         </section>
 
-        <!-- Global Analytics Grid -->
+        <!-- Global Analytics Grid (Thai localized) -->
         <section class="analytics-hud">
           <div class="hud-box info-blue">
             <div class="hud-icon-shell">🥋</div>
             <div class="hud-box-content">
               <div class="hud-box-lbl">อัศวินในระบบ</div>
               <div class="hud-box-val text-glow-blue" id="stat-active-knights">${totalKnights}</div>
-              <div class="hud-box-sub">Registered Active Profiles</div>
+              <div class="hud-box-sub">บัญชีอัศวินที่ลงทะเบียนแล้ว</div>
             </div>
             <div class="hud-deco-bar"></div>
           </div>
@@ -61,13 +61,13 @@ export class DkHomePortal extends HTMLElement {
             <div class="hud-box-content">
               <div class="hud-box-lbl">บันทึกชั่วโมงซ้อม</div>
               <div class="hud-box-val text-glow-gold" id="stat-logged-sessions">${totalSessions}</div>
-              <div class="hud-box-sub">Logged Sessions Active</div>
+              <div class="hud-box-sub">จำนวนเซสชันที่บันทึกในระบบ</div>
             </div>
             <div class="hud-deco-bar gold"></div>
           </div>
         </section>
 
-        <!-- Mission Portal Grid (Interactive 3-Column Navigation) -->
+        <!-- Mission Portal Grid (Thai localized) -->
         <section class="mission-grid">
           
           <!-- Card 1: Neon Blue Border -->
@@ -80,7 +80,7 @@ export class DkHomePortal extends HTMLElement {
             </div>
             <h2 class="mission-title text-glow-blue">KNIGHT PROFILE</h2>
             <p class="mission-desc">ส่องการ์ดตัวละคร แต่งตัว Lego และเช็กสเตตัสกราฟ 9 เหลี่ยม</p>
-            <div class="mission-action text-glow-blue">ENTER ROOM →</div>
+            <div class="mission-action text-glow-blue">เข้าสู่โปรไฟล์อัศวิน →</div>
             <div class="corner-trim tr"></div>
             <div class="corner-trim bl"></div>
           </div>
@@ -97,7 +97,7 @@ export class DkHomePortal extends HTMLElement {
             </div>
             <h2 class="mission-title">ATTENDANCE FORM</h2>
             <p class="mission-desc">ห้องพักโค้ช: เช็กชื่อรายวัน เลือกดริลส์ฝึก และคอมเมนต์พัฒนาการ</p>
-            <div class="mission-action">OPEN TERMINAL →</div>
+            <div class="mission-action">เปิดหน้าต่างเช็กชื่อ →</div>
             <div class="corner-trim tr"></div>
             <div class="corner-trim bl"></div>
           </div>
@@ -111,18 +111,18 @@ export class DkHomePortal extends HTMLElement {
             </div>
             <h2 class="mission-title text-glow-gold">PHYSICAL ASSESSMENT</h2>
             <p class="mission-desc">ลานประเมินร่างกาย: อัปเดตแต้มสรีรวิทยาและกลไกเคลื่อนไหว 9 ด้าน</p>
-            <div class="mission-action text-glow-gold">ENGAGE MATRIX →</div>
+            <div class="mission-action text-glow-gold">เข้าสู่แท่นประเมินร่างกาย →</div>
             <div class="corner-trim tr"></div>
             <div class="corner-trim bl"></div>
           </div>
 
         </section>
 
-        <!-- Leaderboard (Hall of Fame Footer) -->
+        <!-- Leaderboard (Thai Localized) -->
         <section class="guild-leaderboard">
           <div class="leaderboard-header">
-            <h2 class="leaderboard-title">🏆 HALL OF FAME <span class="text-glow-gold">MVP KNIGHTS</span></h2>
-            <p class="leaderboard-subtitle">Monthly top ranking cadets based on physical calibrations</p>
+            <h2 class="leaderboard-title">🏆 ทำเนียบเกียรติยศอัศวินประจำเดือน</h2>
+            <p class="leaderboard-subtitle">รายชื่อนักกีฬายอดเยี่ยมที่มีคะแนนประเมินสมรรถภาพสูงสุดในรอบเดือน</p>
           </div>
           
           <div class="leaderboard-ranks">
@@ -140,18 +140,27 @@ export class DkHomePortal extends HTMLElement {
 
               const sum = Object.values(player.skills).reduce((acc, v) => acc + v, 0);
               const avg = Math.round(sum / 9);
-              const title = calculateTitle(player.skills);
+
+              // Translate common titles to Thai for home lobby
+              let thTitle = 'อัศวินฝึกหัด';
+              const enTitle = calculateTitle(player.skills);
+              if (enTitle.includes('Lightning Striker')) thTitle = 'ผู้จู่โจมสายฟ้าแลบ ⚡';
+              else if (enTitle.includes('Ghost Dancer')) thTitle = 'แดนเซอร์เงาไร้เสียง 👣';
+              else if (enTitle.includes('Destructive')) thTitle = 'อัศวินจอมทำลายล้าง 💥';
+              else if (enTitle.includes('Flash Speedster')) thTitle = 'ผู้พิทักษ์ความเร็วแสง 🚀';
+              else if (enTitle.includes('Rookie Squire')) thTitle = 'นักรบฝึกหัดสไควร์';
+              else thTitle = enTitle;
 
               return `
                 <div class="rank-strip ${tierClass}" data-student-id="${player.id}">
-                  <div class="rank-num">${badge} Rank ${rank}</div>
+                  <div class="rank-num">${badge} อันดับที่ ${rank}</div>
                   <div class="rank-player-details">
                     <span class="rank-name">${player.name}</span>
                     <span class="rank-alias">"${player.nickname}"</span>
-                    <div class="rank-class-badge">${title}</div>
+                    <div class="rank-class-badge">${thTitle}</div>
                   </div>
                   <div class="rank-score">
-                    <span class="score-lbl">Combat Rating</span>
+                    <span class="score-lbl">คะแนนต่อสู้เฉลี่ย</span>
                     <span class="score-num">${avg}</span>
                   </div>
                 </div>

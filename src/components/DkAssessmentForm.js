@@ -24,7 +24,7 @@ export class DkAssessmentForm extends HTMLElement {
     const student = store.getActiveStudent();
 
     if (!student) {
-      this.innerHTML = `<div class="cyber-card"><h2 class="text-glow-blue">No student selected for physical assessment.</h2></div>`;
+      this.innerHTML = `<div class="cyber-card"><h2 class="text-glow-blue">ไม่พบรายชื่ออัศวินสำหรับการประเมินร่างกาย</h2></div>`;
       return;
     }
 
@@ -32,24 +32,51 @@ export class DkAssessmentForm extends HTMLElement {
     this.skills = { ...student.skills };
 
     const skillLabels = {
-      power: { name: 'Power 💥', desc: 'Explosive jump smashes and raw muscular force.' },
-      speed: { name: 'Speed ⚡', desc: 'Sprinting pace and single-stroke acceleration.' },
-      endurance: { name: 'Endurance 🫁', desc: 'Aerobic stamina for grinding 3-set rallies.' },
-      flexibility: { name: 'Flexibility 🧘', desc: 'Lunging extension range and joint durability.' },
-      bodyComposition: { name: 'Body Composition ⚖️', desc: 'Ratio of lean athletic mass to fat composition.' },
-      quickness: { name: 'Quickness 🚀', desc: 'Split-second reaction speed and fast racket work.' },
-      agility: { name: 'Agility 👣', desc: 'Multi-directional court transitions and cuts.' },
-      balance: { name: 'Balance 🤸', desc: 'Core equilibrium post-smash landing.' },
-      coordination: { name: 'Coordination 🎯', desc: 'Racket-face contact precision and timing.' }
+      power: { 
+        name: 'Power (พละกำลัง) 💥', 
+        desc: 'ความแรงในการกระโดดตบสะท้านและความแข็งแกร่งของกล้ามเนื้อระเบิดพลัง' 
+      },
+      speed: { 
+        name: 'Speed (ความเร็ว) ⚡', 
+        desc: 'ความเร็วในการพุ่งตัวสปรินต์คอร์ทและความเร่งในแต่ละจังหวะสโตรก' 
+      },
+      endurance: { 
+        name: 'Endurance (ความอดทน) 🫁', 
+        desc: 'ความอึดของระบบปอดและหัวใจเพื่อยื้อเกมยาว 3 เซตได้อย่างไร้ขีดจำกัด' 
+      },
+      flexibility: { 
+        name: 'Flexibility (ความอ่อนตัว) 🧘', 
+        desc: 'องศามุมเหยียดแขนขาสำหรับการพุ่งตักหยอดหน้าเน็ตและความยืดหยุ่นข้อต่อ' 
+      },
+      bodyComposition: { 
+        name: 'Body Composition (องค์ประกอบร่างกาย) ⚖️', 
+        desc: 'ดัชนีสัดส่วนไขมันต่อมวลกล้ามเนื้อที่เหมาะสมตามเกณฑ์ของนักกีฬาขั้นสูง' 
+      },
+      quickness: { 
+        name: 'Quickness (การตอบสนอง) 🚀', 
+        desc: 'ความเร็วของปฏิกิริยาการรับรู้ของสมองและการเคลื่อนไหวแร็กเก็ตที่ว่องไว' 
+      },
+      agility: { 
+        name: 'Agility (ความคล่องตัว) 👣', 
+        desc: 'ความเร็วในการเปลี่ยนทิศทางกะทันหัน วิ่งถอยหลัง และสไลด์คอร์ทสี่มุม' 
+      },
+      balance: { 
+        name: 'Balance (การทรงตัว) 🤸', 
+        desc: 'ความมั่นคงเสถียรของแกนกลางลำตัวขณะลงสู่พื้นหลังกระโดดตบลอยตัว' 
+      },
+      coordination: { 
+        name: 'Coordination (ความแม่นยำ) 🎯', 
+        desc: 'การทำงานประสานกันของสายตา แขน และแร็กเก็ตเพื่อจุดกระทบลูกที่แม่นยำ' 
+      }
     };
 
     this.innerHTML = `
       <div class="assessment-container cyber-card">
-        <h2 class="form-title"><span class="text-glow-blue">🔬 Neural Calibration</span> Physical Matrix</h2>
-        <p class="form-subtitle">Calibrate the 9 biometrics during monthly assessment days to recalculate titles and classes.</p>
+        <h2 class="form-title"><span class="text-glow-blue">🔬 แผงควบคุมประเมินสรีระ</span> ทางกายภาพนักกีฬา</h2>
+        <p class="form-subtitle">ปรับค่าพารามิเตอร์ชีวกลศาสตร์ 9 ด้านในวันทดสอบประจำเดือนเพื่อประเมินความคืบหน้าของอัศวิน</p>
 
         <div class="student-load-panel">
-          <label class="form-label">Calibrate Target</label>
+          <label class="form-label">อัศวินเป้าหมายที่ต้องการสอบวัดผล</label>
           <select class="form-select" id="assessment-student-select">
             ${students.map(s => `
               <option value="${s.id}" ${s.id === student.id ? 'selected' : ''}>
@@ -84,7 +111,7 @@ export class DkAssessmentForm extends HTMLElement {
 
           <div class="form-actions mt-2">
             <button type="submit" class="btn-cyber w-100" id="btn-submit-assessment">
-              CALIBRATE BIOMETRIC DATA
+              ยืนยันการบันทึกค่าสมรรถภาพร่างกาย
             </button>
           </div>
         </form>
@@ -143,10 +170,9 @@ export class DkAssessmentForm extends HTMLElement {
         }
 
         .node-title {
-          font-family: var(--font-display);
+          font-family: var(--font-body);
           font-size: 0.85rem;
-          font-weight: 700;
-          text-transform: uppercase;
+          font-weight: 600;
           color: var(--text-primary);
         }
 
@@ -254,9 +280,9 @@ export class DkAssessmentForm extends HTMLElement {
 
           // Shift classes dynamically
           display.className = 'node-value';
-          if (val >= 80) display.classList.add('rating-milestone');
-          else if (val < 50) display.classList.add('rating-under');
-          else display.classList.add('rating-normal');
+          if (val >= 80) display.className = 'node-value rating-milestone';
+          else if (val < 50) display.className = 'node-value rating-under';
+          else display.className = 'node-value rating-normal';
         }
       });
     });
@@ -278,13 +304,13 @@ export class DkAssessmentForm extends HTMLElement {
         submitBtn.style.opacity = '1';
 
         if (success) {
-          // Toast Notification
+          // Toast Notification (Thai Localized)
           this.dispatchEvent(new CustomEvent('show-toast', {
             bubbles: true,
             composed: true,
             detail: {
               type: 'success',
-              message: `Physical biometrics calibrated for ${student.name}!`
+              message: `บันทึกข้อมูลสรีระกายภาพสำหรับ ${student.name} เรียบร้อยแล้ว!`
             }
           }));
 
@@ -297,7 +323,7 @@ export class DkAssessmentForm extends HTMLElement {
             }));
           }, 800);
         } else {
-          alert('Error: Biometric matrix failed to calibrate.');
+          alert('Error: การบันทึกค่าสมรรถภาพร่างกายล้มเหลว');
         }
       }, 600);
     });

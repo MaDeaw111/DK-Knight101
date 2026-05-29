@@ -15,36 +15,37 @@ export class DkAttendanceForm extends HTMLElement {
     const activeStudent = store.getActiveStudent();
     const today = new Date().toISOString().split('T')[0];
 
+    // Drills localized to Thai for BWF tag lists
     const predefinedDrills = [
-      'Power Jumps to Smash',
-      'Half-Court Net-Tape Game',
-      'Shadow Multi-Stroke',
-      'Forehand Clears Mastery',
-      'Backhand Drop Shot Precision',
-      'Footwork Grid Speedrun'
+      { id: 'Power Jumps to Smash', name: 'ตบกระโดดทรงพลัง (Power Smash) 💥' },
+      { id: 'Half-Court Net-Tape Game', name: 'เกมหยอดหน้าเน็ตครึ่งสนาม (Net Play) 🏸' },
+      { id: 'Shadow Multi-Stroke', name: 'วิ่งเงาจัดท่าตีต่อเนื่อง (Shadow Footwork) 👣' },
+      { id: 'Forehand Clears Mastery', name: 'ตีดึงเซฟหลังคอร์ท (Forehand Clear) 🎯' },
+      { id: 'Backhand Drop Shot Precision', name: 'ตัดหยอดโฟร์แฮนด์/แบ็คแฮนด์แม่นยำ 🧘' },
+      { id: 'Footwork Grid Speedrun', name: 'วิ่งทดสอบความไวตาราง 9 ช่อง 🚀' }
     ];
 
     const quickFeedbacks = [
-      'Showed outstanding explosive power on smash angles today.',
-      'Excellent tumbling net shots. Net tape play was highly precise.',
-      'Improved lateral movement response. Focus on recovery balance next session.',
-      'Grip transitions from backhand to forehand are showing great agility.',
-      'Core stability during rapid flat drive exchanges is exceptionally high.'
+      'วันนี้ทำได้ดีมากในการกระโดดตบลูกทำมุมเฉียบคม พละกำลังขาและสะโพกทำงานได้อย่างสมบูรณ์แบบ',
+      'หยอดเน็ตได้ดีเยี่ยม ลูกปั่นเน็ตหมุนตัวสวยงาม สมาธิและการจับจังหวะผ่อนข้อมือดีขึ้นชัดเจน',
+      'ความไวการสเต็ปเท้าเฉียงสี่มุมดีขึ้นมาก ควรเสริมการล็อกข้อเท้าตอนสปริงตัวเบรกในเซสชันหน้า',
+      'สไตล์การเปลี่ยนหน้าแร็กเก็ตโฟร์แฮนด์ไปแบ็คแฮนด์มีความว่องไวสูง ช่วยให้ควบคุมเกมรุกได้ดี',
+      'รักษาแกนกลางและจุดศูนย์ถ่วงตัวช่วงตบได้ดีเยี่ยม ความอึดในการยืนระยะดริลทำได้ดีไม่มีแผ่ว'
     ];
 
     this.innerHTML = `
       <div class="attendance-form-container cyber-card">
-        <h2 class="form-title"><span class="text-glow-blue">📝 Lesson Terminal</span> Coach Logging Log</h2>
-        <p class="form-subtitle">Register badminton drills completed and inject training hours into student profiles.</p>
+        <h2 class="form-title"><span class="text-glow-blue">📝 ห้องพักผู้ฝึกสอน</span> บันทึกชั่วโมงเรียนและดริลส์ฝึก</h2>
+        <p class="form-subtitle">เช็กชื่อเข้าเรียนของนักกีฬา เลือกรายการทักษะที่ฝึกฝนสำเร็จ และบันทึกคำแนะนำเพื่อรับแต้ม EXP</p>
         
         <form id="attendance-log-form" class="hud-form">
           
           <div class="form-row">
             <!-- Student Select -->
             <div class="form-group flex-grow-1">
-              <label class="form-label">Select Student Knight</label>
+              <label class="form-label">เลือกอัศวินผู้ฝึกซ้อม</label>
               <select class="form-select" id="student-search-select" required>
-                <option value="" disabled>-- Search Student ID --</option>
+                <option value="" disabled>-- ค้นหาและเลือกรหัสอัศวิน --</option>
                 ${students.map(s => `
                   <option value="${s.id}" ${activeStudent && activeStudent.id === s.id ? 'selected' : ''}>
                     ${s.id} - ${s.name} (${s.nickname})
@@ -55,19 +56,19 @@ export class DkAttendanceForm extends HTMLElement {
 
             <!-- Date Picker -->
             <div class="form-group min-w-200">
-              <label class="form-label">Training Date</label>
+              <label class="form-label">วันที่เข้าเรียน</label>
               <input type="date" class="form-input" id="training-date" value="${today}" required />
             </div>
           </div>
 
           <!-- BWF Drills selector -->
           <div class="form-group">
-            <label class="form-label">BWF Drills Mastered Today <span class="drill-count-badge" id="drill-count">(0 Selected)</span></label>
+            <label class="form-label">ทักษะดริลส์ BWF ที่ผ่านเกณฑ์วันนี้ <span class="drill-count-badge" id="drill-count">(เลือกแล้ว 0 รายการ)</span></label>
             <div class="drills-grid">
               ${predefinedDrills.map(drill => `
-                <div class="drill-chip-btn" data-drill="${drill}">
+                <div class="drill-chip-btn" data-drill="${drill.id}">
                   <span class="chip-plus">+</span>
-                  <span class="chip-text">${drill}</span>
+                  <span class="chip-text">${drill.name}</span>
                 </div>
               `).join('')}
             </div>
@@ -75,15 +76,15 @@ export class DkAttendanceForm extends HTMLElement {
 
           <!-- Coach Feedback text -->
           <div class="form-group">
-            <label class="form-label">Coach Tactical Feedback</label>
-            <textarea class="form-textarea" id="coach-feedback" rows="4" placeholder="Enter tactical, physical, or psychological feedback observations..." required></textarea>
+            <label class="form-label">ความเห็นเชิงกลยุทธ์ของผู้ฝึกสอน (Tactical Feedback)</label>
+            <textarea class="form-textarea" id="coach-feedback" rows="4" placeholder="กรอกข้อเสนอแนะเชิงทักษะสรีรวิทยา หรือจิตวิทยาสำหรับอัศวินในวันนี้..." required></textarea>
             
             <!-- Quick Suggestion Templates -->
             <div class="templates-section">
-              <span class="templates-lbl">Quick-Fill Templates:</span>
+              <span class="templates-lbl">ร่างคอมเมนต์ด่วน (คลิกเพื่อวางคำ):</span>
               <div class="templates-list">
                 ${quickFeedbacks.map((fb, idx) => `
-                  <button type="button" class="btn-template-tag" data-fb-text="${fb}">Draft ${idx + 1}</button>
+                  <button type="button" class="btn-template-tag" data-fb-text="${fb}">บันทึกด่วนร่างที่ ${idx + 1}</button>
                 `).join('')}
               </div>
             </div>
@@ -93,7 +94,7 @@ export class DkAttendanceForm extends HTMLElement {
           <div class="form-actions">
             <button type="submit" class="btn-cyber w-100" id="btn-save-attendance">
               <span class="btn-loading-dot"></span>
-              SAVE ATTENDANCE & INJECT EXP
+              ยืนยันการบันทึกการเรียนและเพิ่มแต้ม EXP (+2 ชม.)
             </button>
           </div>
 
@@ -158,9 +159,8 @@ export class DkAttendanceForm extends HTMLElement {
           align-items: center;
           gap: 0.6rem;
           color: var(--text-secondary);
-          font-family: var(--font-display);
+          font-family: var(--font-body);
           font-size: 0.8rem;
-          text-transform: uppercase;
           transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
           user-select: none;
         }
@@ -271,7 +271,7 @@ export class DkAttendanceForm extends HTMLElement {
           this.selectedDrills.add(drill);
           chip.classList.add('active');
         }
-        countBadge.textContent = `(${this.selectedDrills.size} Selected)`;
+        countBadge.textContent = `(เลือกแล้ว ${this.selectedDrills.size} รายการ)`;
       });
     });
 
@@ -297,12 +297,12 @@ export class DkAttendanceForm extends HTMLElement {
       const feedback = feedbackTextarea.value.trim();
 
       if (!studentId) {
-        alert('Please select a Student Knight.');
+        alert('กรุณาเลือกรายชื่ออัศวิน');
         return;
       }
 
       if (this.selectedDrills.size === 0) {
-        alert('Please select at least one BWF Drill.');
+        alert('กรุณาเลือกดริลส์ฝึก BWF อย่างน้อย 1 ทักษะ');
         return;
       }
 
@@ -328,19 +328,19 @@ export class DkAttendanceForm extends HTMLElement {
           // Reset drills
           this.selectedDrills.clear();
           chips.forEach(c => c.classList.remove('active'));
-          countBadge.textContent = `(0 Selected)`;
+          countBadge.textContent = `(เลือกแล้ว 0 รายการ)`;
           form.reset();
           
           // Re-populate date default
           this.querySelector('#training-date').value = new Date().toISOString().split('T')[0];
 
-          // Trigger dynamic success Toast notification
+          // Trigger dynamic success Toast notification (Thai Localized)
           this.dispatchEvent(new CustomEvent('show-toast', {
             bubbles: true,
             composed: true,
             detail: {
               type: 'success',
-              message: 'Attendance log saved. +2 Training Hours injected!'
+              message: 'บันทึกประวัติการเข้าเรียนของอัศวินและชั่วโมงสะสม +2 EXP สำเร็จ!'
             }
           }));
 
@@ -353,7 +353,7 @@ export class DkAttendanceForm extends HTMLElement {
             }));
           }, 800);
         } else {
-          alert('Error: Student profile could not be logged.');
+          alert('Error: บันทึกประวัติล้มเหลว');
         }
       }, 600);
     });

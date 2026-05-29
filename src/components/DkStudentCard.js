@@ -1,6 +1,42 @@
 import { store, calculateLevel, getLTADClass, calculateTitle } from '../store.js';
 import { Chart } from 'chart.js/auto';
 
+// Helper to translate LTAD classes into Thai
+function translateLTAD(ltadClass) {
+  if (ltadClass.includes('FUNdamentals')) return 'พื้นฐานทักษะแสนสนุก (FUNdamentals)';
+  if (ltadClass.includes('Learn to Train')) return 'เรียนรู้เพื่อฝึกซ้อม (Learn to Train)';
+  if (ltadClass.includes('Train to Train')) return 'ฝึกซ้อมเพื่อการฝึกฝน (Train to Train)';
+  if (ltadClass.includes('Train to Compete')) return 'ฝึกซ้อมเพื่อการแข่งขัน (Train to Compete)';
+  if (ltadClass.includes('Train to Win')) return 'ฝึกซ้อมเพื่อชัยชนะ (Train to Win)';
+  return ltadClass;
+}
+
+// Helper to translate Character Titles to Thai
+function translateTitle(title) {
+  switch (title) {
+    case 'Rookie Squire': return 'อัศวินฝึกหัดสไควร์';
+    case 'Heavy Vanguard': return 'ทัพหน้าพลังช้างศึก';
+    case 'Destructive DK Knight': return 'อัศวินจอมทำลายล้าง 💥';
+    case 'Sonic Vanguard': return 'ทหารเสือความเร็วเสียง';
+    case 'Flash Speedster': return 'ผู้พิทักษ์ความเร็วแสง 🚀';
+    case 'Relentless Scout': return 'หน่วยลาดตระเวนอึดเหล็ก';
+    case 'Unstoppable Engine': return 'จอมพลังเครื่องจักรไร้ขีดจำกัด 🫁';
+    case 'Agile Striker': return 'ตัวตบยืดหยุ่นไร้ขอบเขต';
+    case 'Liquid Serpent': return 'อสรพิษลื่นไหลไร้โครงกระดูก 🧘';
+    case 'Steadfast Defender': return 'กองหลังเหล็กไหลหนาแน่น';
+    case 'Iron Goliath': return 'ยักษ์ใหญ่โกไลแอทเหล็กกล้า ⚖️';
+    case 'Swift Assassin': return 'นักฆ่าสังหารเงียบตอบสนองไว';
+    case 'Lightning Striker': return 'ผู้จู่โจมสายฟ้าแลบ ⚡';
+    case 'Phantom Ninja': return 'นินจาเงาข้ามมิติ';
+    case 'Ghost Dancer': return 'แดนเซอร์เงาไร้เสียง 👣';
+    case 'Unshakable Guard': return 'ทหารยามกำแพงศิลา';
+    case 'Steadfast Bastion': return 'ปราการปราสาทไม่มีวันล้ม 🤸';
+    case 'Strategic Blade': return 'ดาบกลยุทธ์ควบคุมสนาม';
+    case 'Master Tactician': return 'สุดยอดเสนาธิการทหารไร้พ่าย 🎯';
+    default: return 'อัศวินฝึกหัด';
+  }
+}
+
 // 2D Lego SVG Customizer Generator
 function generateLegoSvg(avatar, gripHand = 'Right') {
   // Color mappings
@@ -248,22 +284,22 @@ export class DkStudentCard extends HTMLElement {
   render() {
     const student = store.getActiveStudent();
     if (!student) {
-      this.innerHTML = `<div class="cyber-card"><h2 class="text-glow-blue">No active Knight loaded.</h2></div>`;
+      this.innerHTML = `<div class="cyber-card"><h2 class="text-glow-blue">ยังไม่ได้โหลดข้อมูลโปรไฟล์อัศวิน</h2></div>`;
       return;
     }
 
     const level = calculateLevel(student.trainingHours);
-    const ltad = getLTADClass(level);
-    const title = calculateTitle(student.skills);
+    const ltad = translateLTAD(getLTADClass(level));
+    const title = translateTitle(calculateTitle(student.skills));
     const studentsList = store.getStudents();
 
     this.innerHTML = `
       <div class="student-profile-container">
         
-        <!-- Top Toolbar for student selection -->
+        <!-- Top Toolbar for student selection (Thai Localized) -->
         <div class="profile-toolbar cyber-card">
           <div class="form-group mb-0 flex-grow-1">
-            <label class="form-label">Load Knight Profile</label>
+            <label class="form-label">เลือกโปรไฟล์อัศวิน</label>
             <select class="form-select" id="student-selector">
               ${studentsList.map(s => `
                 <option value="${s.id}" ${s.id === student.id ? 'selected' : ''}>
@@ -273,20 +309,20 @@ export class DkStudentCard extends HTMLElement {
             </select>
           </div>
           <div class="toolbar-stats-box">
-            <span class="toolbar-stat-lbl">Grip:</span>
-            <span class="toolbar-stat-val text-glow-blue">${student.gripHand} Hand</span>
+            <span class="toolbar-stat-lbl">มือที่ถนัด:</span>
+            <span class="toolbar-stat-val text-glow-blue">${student.gripHand === 'Right' ? 'ขวา' : 'ซ้าย'}</span>
             <span class="toolbar-separator">|</span>
-            <span class="toolbar-stat-lbl">Play Style:</span>
-            <span class="toolbar-stat-val text-glow-gold">${student.playStyle}</span>
+            <span class="toolbar-stat-lbl">สไตล์การเล่น:</span>
+            <span class="toolbar-stat-val text-glow-gold">${student.playStyle === 'Singles' ? 'ประเภทเดี่ยว' : 'ประเภทคู่'}</span>
           </div>
         </div>
 
         <!-- Main Split Screen Panel -->
         <div class="profile-grid">
           
-          <!-- LEFT SIDE: Lego Avatar Customizer -->
+          <!-- LEFT SIDE: Lego Avatar Customizer (Thai Localized) -->
           <div class="avatar-customizer-panel cyber-card">
-            <h3 class="panel-header-title"><span class="text-glow-blue">🤖 Avatar</span> Fabricator</h3>
+            <h3 class="panel-header-title"><span class="text-glow-blue">🤖 ห้องวิจัยสกิน</span> อวาตาร์เลโก้ 2D</h3>
             
             <!-- Dynamic Lego Container -->
             <div class="avatar-render-box" id="lego-avatar-container">
@@ -296,49 +332,49 @@ export class DkStudentCard extends HTMLElement {
             <!-- Customizer controls -->
             <div class="customizer-controls">
               <div class="control-row">
-                <label class="control-label">Gender</label>
+                <label class="control-label">เพศตัวละคร</label>
                 <div class="btn-group">
-                  <button class="btn-ctrl-toggle ${student.avatar.gender === 'male' ? 'active' : ''}" data-avatar-prop="gender" data-avatar-val="male">M</button>
-                  <button class="btn-ctrl-toggle ${student.avatar.gender === 'female' ? 'active' : ''}" data-avatar-prop="gender" data-avatar-val="female">F</button>
+                  <button class="btn-ctrl-toggle ${student.avatar.gender === 'male' ? 'active' : ''}" data-avatar-prop="gender" data-avatar-val="male">ชาย</button>
+                  <button class="btn-ctrl-toggle ${student.avatar.gender === 'female' ? 'active' : ''}" data-avatar-prop="gender" data-avatar-val="female">หญิง</button>
                 </div>
               </div>
 
               <div class="control-row">
-                <label class="control-label">Skin Color</label>
+                <label class="control-label">สีผิวอวาตาร์</label>
                 <select class="form-select sm" id="skin-selector">
-                  <option value="light" ${student.avatar.skinColor === 'light' ? 'selected' : ''}>Light Peach</option>
-                  <option value="medium" ${student.avatar.skinColor === 'medium' ? 'selected' : ''}>Medium Yellow</option>
-                  <option value="tan" ${student.avatar.skinColor === 'tan' ? 'selected' : ''}>Tan Honey</option>
-                  <option value="dark" ${student.avatar.skinColor === 'dark' ? 'selected' : ''}>Dark Chocolate</option>
+                  <option value="light" ${student.avatar.skinColor === 'light' ? 'selected' : ''}>ขาวชมพู (Light Peach)</option>
+                  <option value="medium" ${student.avatar.skinColor === 'medium' ? 'selected' : ''}>เหลือง (Medium Yellow)</option>
+                  <option value="tan" ${student.avatar.skinColor === 'tan' ? 'selected' : ''}>สองสี (Tan Honey)</option>
+                  <option value="dark" ${student.avatar.skinColor === 'dark' ? 'selected' : ''}>ผิวคล้ำ (Dark Chocolate)</option>
                 </select>
               </div>
 
               <div class="control-row">
-                <label class="control-label">Hair Style</label>
+                <label class="control-label">ทรงผมเท่</label>
                 <select class="form-select sm" id="hair-selector">
-                  <option value="spiky" ${student.avatar.hairStyle === 'spiky' ? 'selected' : ''}>Spiky Slate</option>
-                  <option value="ponytail" ${student.avatar.hairStyle === 'ponytail' ? 'selected' : ''}>Auburn Tail</option>
-                  <option value="afro" ${student.avatar.hairStyle === 'afro' ? 'selected' : ''}>Curly Afro</option>
-                  <option value="undercut" ${student.avatar.hairStyle === 'undercut' ? 'selected' : ''}>Ginger Undercut</option>
-                  <option value="bald" ${student.avatar.hairStyle === 'bald' ? 'selected' : ''}>Shiny Bald</option>
+                  <option value="spiky" ${student.avatar.hairStyle === 'spiky' ? 'selected' : ''}>ชี้สแลต (Spiky)</option>
+                  <option value="ponytail" ${student.avatar.hairStyle === 'ponytail' ? 'selected' : ''}>หางม้า (Ponytail)</option>
+                  <option value="afro" ${student.avatar.hairStyle === 'afro' ? 'selected' : ''}>ฟูแอฟโฟร (Afro)</option>
+                  <option value="undercut" ${student.avatar.hairStyle === 'undercut' ? 'selected' : ''}>เปิดข้างส้ม (Undercut)</option>
+                  <option value="bald" ${student.avatar.hairStyle === 'bald' ? 'selected' : ''}>หัวโล้นเงา (Shiny Bald)</option>
                 </select>
               </div>
 
               <div class="control-row">
-                <label class="control-label">Club Shirt</label>
+                <label class="control-label">เสื้อผ้ากิลด์</label>
                 <select class="form-select sm" id="shirt-selector">
-                  <option value="neon-blue" ${student.avatar.shirt === 'neon-blue' ? 'selected' : ''}>Neon Knight</option>
-                  <option value="gold" ${student.avatar.shirt === 'gold' ? 'selected' : ''}>Gold Champion</option>
-                  <option value="charcoal" ${student.avatar.shirt === 'charcoal' ? 'selected' : ''}>Stealth Onyx</option>
+                  <option value="neon-blue" ${student.avatar.shirt === 'neon-blue' ? 'selected' : ''}>อัศวินนีออน (Neon Blue)</option>
+                  <option value="gold" ${student.avatar.shirt === 'gold' ? 'selected' : ''}>แชมเปี้ยนทอง (Gold Champ)</option>
+                  <option value="charcoal" ${student.avatar.shirt === 'charcoal' ? 'selected' : ''}>สเตลธ์ออนิกซ์ (Stealth Onyx)</option>
                 </select>
               </div>
 
               <div class="control-row">
-                <label class="control-label">Weapon Racket</label>
+                <label class="control-label">แร็กเก็ตคู่ใจ</label>
                 <select class="form-select sm" id="racket-selector">
-                  <option value="blue" ${student.avatar.racket === 'blue' ? 'selected' : ''}>Aero-Force Blue</option>
-                  <option value="gold" ${student.avatar.racket === 'gold' ? 'selected' : ''}>Volt-Strike Gold</option>
-                  <option value="silver" ${student.avatar.racket === 'silver' ? 'selected' : ''}>Nano-Speed Silver</option>
+                  <option value="blue" ${student.avatar.racket === 'blue' ? 'selected' : ''}>บลูแอโรฟอร์ซ (Aero Blue)</option>
+                  <option value="gold" ${student.avatar.racket === 'gold' ? 'selected' : ''}>โกลด์โวลต์สไตรค์ (Volt Gold)</option>
+                  <option value="silver" ${student.avatar.racket === 'silver' ? 'selected' : ''}>ซิลเวอร์นาโนสปีด (Nano Silver)</option>
                 </select>
               </div>
             </div>
@@ -352,30 +388,30 @@ export class DkStudentCard extends HTMLElement {
               <div class="identity-header">
                 <div>
                   <h2 class="identity-name">${student.name}</h2>
-                  <div class="identity-nickname">Callsign: <span class="text-glow-blue">"${student.nickname}"</span></div>
+                  <div class="identity-nickname">ชื่อรหัสสนาม: <span class="text-glow-blue">"${student.nickname}"</span></div>
                 </div>
                 <div class="level-badge-box">
-                  <div class="level-lbl">LVL</div>
+                  <div class="level-lbl">เลเวล</div>
                   <div class="level-val">${level}</div>
                 </div>
               </div>
 
               <!-- Title Banner -->
               <div class="title-banner text-glow-gold">
-                🛡️ ${title}
+                🛡️ ฉายา: ${title}
               </div>
 
               <div class="identity-stats-grid">
                 <div class="id-stat-node">
-                  <div class="id-stat-lbl">Development Class</div>
-                  <div class="id-stat-val text-glow-blue">${ltad}</div>
+                  <div class="id-stat-lbl">คลาสพัฒนาการ (LTAD)</div>
+                  <div class="id-stat-val text-glow-blue" style="font-size:0.8rem;">${ltad}</div>
                 </div>
                 <div class="id-stat-node">
-                  <div class="id-stat-lbl">Training Hours</div>
-                  <div class="id-stat-val text-glow-gold">${student.trainingHours} hrs</div>
+                  <div class="id-stat-lbl">ชั่วโมงซ้อมสะสม</div>
+                  <div class="id-stat-val text-glow-gold">${student.trainingHours} ชั่วโมง</div>
                 </div>
                 <div class="id-stat-node">
-                  <div class="id-stat-lbl">Combat Rating</div>
+                  <div class="id-stat-lbl">คะแนนประเมินรวม</div>
                   <div class="id-stat-val" id="combat-rating-val">--</div>
                 </div>
               </div>
@@ -383,7 +419,7 @@ export class DkStudentCard extends HTMLElement {
 
             <!-- 9-Axis Skill Chart Card -->
             <div class="radar-chart-card cyber-card">
-              <h3 class="panel-header-title"><span class="text-glow-blue">📊 Skill Spectrum</span> 9-Axis Calibration</h3>
+              <h3 class="panel-header-title"><span class="text-glow-blue">📊 วงแหวนวิเคราะห์</span> ประเมินร่างกายสรีรวิทยา 9 ด้าน</h3>
               <div class="canvas-wrapper">
                 <canvas id="skills-radar-chart"></canvas>
               </div>
@@ -394,29 +430,42 @@ export class DkStudentCard extends HTMLElement {
 
         <!-- BOTTOM PANEL: Interactive Lesson Logs Timeline -->
         <div class="timeline-panel cyber-card">
-          <h3 class="panel-header-title"><span class="text-glow-gold">📜 Codex Chronology</span> Monthly Lesson Logs</h3>
+          <h3 class="panel-header-title"><span class="text-glow-gold">📜 ประวัติศาสตร์ขุมพลัง</span> บันทึกชั่วโมงซ้อมและคอมเมนต์พัฒนาการ</h3>
           
           <div class="timeline-wrapper">
             ${student.logs.length === 0 ? `
-              <div class="no-logs">No log entries found. Register today's log in Coach Attendance.</div>
-            ` : student.logs.map(log => `
-              <div class="timeline-item">
-                <div class="timeline-marker">
-                  <div class="marker-dot"></div>
-                  <div class="marker-line"></div>
-                </div>
-                <div class="timeline-content-card">
-                  <div class="timeline-header">
-                    <span class="timeline-date">${log.date}</span>
-                    <span class="timeline-coach">Instructor: ${log.coach}</span>
+              <div class="no-logs">ไม่พบบันทึกการซ้อม กรุณาเพิ่มประวัติการเข้าฝึกซ้อมที่หน้าฟอร์มโค้ช</div>
+            ` : student.logs.map(log => {
+              // Convert drills names to Thai dynamically
+              const drillMap = {
+                'Power Jumps to Smash': 'ตบกระโดดทรงพลัง (Power Smash) 💥',
+                'Half-Court Net-Tape Game': 'เกมหยอดหน้าเน็ตครึ่งสนาม (Net Play) 🏸',
+                'Shadow Multi-Stroke': 'วิ่งเงาจัดท่าตีต่อเนื่อง (Shadow Footwork) 👣',
+                'Forehand Clears Mastery': 'ตีดึงเซฟหลังคอร์ท (Forehand Clear) 🎯',
+                'Backhand Drop Shot Precision': 'ตัดหยอดโฟร์แฮนด์/แบ็คแฮนด์แม่นยำ 🧘',
+                'Footwork Grid Speedrun': 'วิ่งทดสอบความไวตาราง 9 ช่อง 🚀'
+              };
+              const thDrills = log.drills.map(d => drillMap[d] || d);
+
+              return `
+                <div class="timeline-item">
+                  <div class="timeline-marker">
+                    <div class="marker-dot"></div>
+                    <div class="marker-line"></div>
                   </div>
-                  <div class="timeline-drills">
-                    ${log.drills.map(drill => `<span class="drill-tag">${drill}</span>`).join('')}
+                  <div class="timeline-content-card">
+                    <div class="timeline-header">
+                      <span class="timeline-date">วันที่ซ้อม: ${log.date}</span>
+                      <span class="timeline-coach">โค้ชผู้คุม: ${log.coach}</span>
+                    </div>
+                    <div class="timeline-drills">
+                      ${thDrills.map(drill => `<span class="drill-tag">${drill}</span>`).join('')}
+                    </div>
+                    <p class="timeline-feedback">"${log.feedback}"</p>
                   </div>
-                  <p class="timeline-feedback">"${log.feedback}"</p>
                 </div>
-              </div>
-            `).join('')}
+              `;
+            }).join('')}
           </div>
         </div>
       </div>
@@ -533,17 +582,15 @@ export class DkStudentCard extends HTMLElement {
         }
 
         .control-label {
-          font-family: var(--font-display);
-          font-size: 0.8rem;
-          text-transform: uppercase;
+          font-family: var(--font-body);
+          font-size: 0.82rem;
           color: var(--text-secondary);
-          letter-spacing: 0.04em;
         }
 
         .form-select.sm {
           padding: 0.4rem 0.8rem;
           font-size: 0.85rem;
-          width: 160px;
+          width: 170px;
         }
 
         .btn-group {
@@ -557,9 +604,9 @@ export class DkStudentCard extends HTMLElement {
           background: rgba(18, 22, 26, 0.8);
           color: var(--text-secondary);
           border: none;
-          font-family: var(--font-display);
+          font-family: var(--font-body);
           font-size: 0.8rem;
-          font-weight: 700;
+          font-weight: 500;
           padding: 0.4rem 1rem;
           cursor: pointer;
           transition: all 0.2s ease;
@@ -600,7 +647,7 @@ export class DkStudentCard extends HTMLElement {
         }
 
         .identity-nickname {
-          font-family: var(--font-display);
+          font-family: var(--font-body);
           font-size: 0.9rem;
           color: var(--text-secondary);
           margin-top: 0.2rem;
@@ -617,7 +664,7 @@ export class DkStudentCard extends HTMLElement {
         }
 
         .level-lbl {
-          font-family: var(--font-display);
+          font-family: var(--font-body);
           font-size: 0.65rem;
           font-weight: 800;
           letter-spacing: 0.05em;
@@ -634,14 +681,13 @@ export class DkStudentCard extends HTMLElement {
         }
 
         .title-banner {
-          font-family: var(--font-display);
-          font-size: 1.1rem;
-          font-weight: 800;
+          font-family: var(--font-body);
+          font-size: 1.05rem;
+          font-weight: 700;
           background: rgba(255, 215, 0, 0.08);
           border: 1px dashed rgba(255, 215, 0, 0.4);
           padding: 0.6rem 1rem;
           text-align: center;
-          text-transform: uppercase;
           letter-spacing: 0.05em;
           border-radius: var(--radius-sm);
         }
@@ -670,7 +716,7 @@ export class DkStudentCard extends HTMLElement {
         }
 
         .id-stat-val {
-          font-family: var(--font-display);
+          font-family: var(--font-body);
           font-size: 0.95rem;
           font-weight: 700;
           word-break: break-word;
@@ -765,9 +811,8 @@ export class DkStudentCard extends HTMLElement {
         .timeline-header {
           display: flex;
           justify-content: space-between;
-          font-family: var(--font-display);
+          font-family: var(--font-body);
           font-size: 0.8rem;
-          text-transform: uppercase;
         }
 
         .timeline-date {
@@ -785,9 +830,8 @@ export class DkStudentCard extends HTMLElement {
         }
 
         .drill-tag {
-          font-family: var(--font-display);
+          font-family: var(--font-body);
           font-size: 0.72rem;
-          text-transform: uppercase;
           background: rgba(0, 210, 255, 0.1);
           color: var(--neon-blue);
           border: 1px solid rgba(0, 210, 255, 0.25);
@@ -867,17 +911,17 @@ export class DkStudentCard extends HTMLElement {
     const canvas = this.querySelector('#skills-radar-chart');
     if (!canvas) return;
 
-    // Map 9 physical parameters
+    // Map 9 physical parameters with strict Thai requirements
     const labels = [
-      'Power 💥',
-      'Speed ⚡',
-      'Endurance 🫁',
-      'Flexibility 🧘',
-      'Body Comp ⚖️',
-      'Quickness 🚀',
-      'Agility 👣',
-      'Balance 🤸',
-      'Coordination 🎯'
+      'Power (พละกำลัง) 💥',
+      'Speed (ความเร็ว) ⚡',
+      'Endurance (ความอดทน) 🫁',
+      'Flexibility (ความอ่อนตัว) 🧘',
+      'Body Composition (องค์ประกอบร่างกาย) ⚖️',
+      'Quickness (การตอบสนอง) 🚀',
+      'Agility (ความคล่องตัว) 👣',
+      'Balance (การทรงตัว) 🤸',
+      'Coordination (ความแม่นยำ) 🎯'
     ];
 
     const dataValues = [
@@ -896,7 +940,7 @@ export class DkStudentCard extends HTMLElement {
     const avg = Math.round(dataValues.reduce((sum, v) => sum + v, 0) / 9);
     const crNode = this.querySelector('#combat-rating-val');
     if (crNode) {
-      crNode.textContent = avg;
+      crNode.textContent = `${avg} / 100`;
     }
 
     // Chart.js Configuration
@@ -905,7 +949,7 @@ export class DkStudentCard extends HTMLElement {
       data: {
         labels: labels,
         datasets: [{
-          label: 'Skill Matrix',
+          label: 'ความสามารถทางกายภาพ',
           data: dataValues,
           backgroundColor: 'rgba(0, 210, 255, 0.18)',
           borderColor: '#00d2ff',
@@ -933,9 +977,9 @@ export class DkStudentCard extends HTMLElement {
             pointLabels: {
               color: '#f8f9fa',
               font: {
-                family: "'Orbitron', sans-serif",
+                family: "'Prompt', 'Orbitron', sans-serif",
                 size: 9,
-                weight: '700'
+                weight: '600'
               }
             },
             ticks: {
@@ -957,7 +1001,7 @@ export class DkStudentCard extends HTMLElement {
           tooltip: {
             callbacks: {
               label: (context) => {
-                return `Rating: ${context.raw}/100`;
+                return `แต้มเฉลี่ย: ${context.raw}/100`;
               }
             }
           }
